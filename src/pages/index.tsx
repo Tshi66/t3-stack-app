@@ -2,9 +2,17 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { api } from "y/utils/api";
+import {
+  Button,
+  LinkBox,
+  LinkOverlay,
+  Box,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ text: "from Takahiro" });
 
   return (
     <>
@@ -19,17 +27,30 @@ export default function Home() {
             Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
           </h1>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
+            <LinkBox
+              as="article"
+              maxW="sm"
+              p="5"
+              borderWidth="1px"
+              rounded="md"
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
             >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
+              <Box as="time" dateTime="2021-01-15 15:30:00 +0000 UTC">
+                13 days ago
+              </Box>
+              <Heading size="md" my="2">
+                <LinkOverlay
+                  href="https://create.t3.gg/en/usage/first-steps"
+                  target="_blank"
+                >
+                  New Year, New Beginnings: Smashing Workshops & Audits
+                </LinkOverlay>
+              </Heading>
+              <Text>
+                Catch up on what’s been cookin’ at Smashing and explore some of
+                the most popular community resources.
+              </Text>
+            </LinkBox>
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
               href="https://create.t3.gg/en/introduction"
@@ -59,7 +80,7 @@ function AuthShowcase() {
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
@@ -68,12 +89,14 @@ function AuthShowcase() {
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+      <Button
+        colorScheme="teal"
+        variant="outline"
+        size="lg"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
-      </button>
+      </Button>
     </div>
   );
 }
